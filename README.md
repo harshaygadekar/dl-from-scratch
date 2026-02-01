@@ -45,12 +45,12 @@ cd "Module 00-Foundations/Topic 01-Tensor-Operations"
 ### Module 1: Neural Network Core
 | Topic | Title | Key Concept |
 |-------|-------|-------------|
-| 04 | Single Layer Perceptron | Binary classification |
+| 04 | Single Layer Perceptron | Sigmoid, BCE loss, binary classification |
 | 05 | MLP Forward Pass | Xavier/Kaiming initialization |
-| 06 | Backpropagation Implementation | Manual chain rule |
-| 07 | Activations & Initialization | ReLU variants, dead neurons |
-| 08 | Regularization | L2, Dropout |
-| 09 | Batch Normalization | Running stats, train vs eval |
+| 06 | Backpropagation | Chain rule, gradient computation |
+| 07 | Activation Functions | ReLU, Sigmoid, Tanh, Softmax |
+| 08 | Loss Functions | MSE, Cross-Entropy, Binary CE |
+| 09 | Regularization | L2, Dropout, Batch Normalization |
 | 10 | End-to-End MNIST | 95% accuracy target |
 
 ### Module 2: Convolutional Networks

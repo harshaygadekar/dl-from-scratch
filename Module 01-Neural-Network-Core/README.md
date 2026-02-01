@@ -18,11 +18,13 @@ This module covers the essential building blocks of neural networks:
 
 | Topic | Name | Description | Duration |
 |-------|------|-------------|----------|
-| 04 | Linear Layer | Weight matrices, biases, forward/backward | 2-3 hrs |
-| 05 | Activations | ReLU, Sigmoid, Tanh, Softmax | 2-3 hrs |
-| 06 | Loss Functions | MSE, Cross-Entropy, Binary CE | 2-3 hrs |
-| 07 | MLP Assembly | Complete multi-layer perceptron | 3-4 hrs |
-| 08 | Training Loop | Epochs, batches, validation | 2-3 hrs |
+| 04 | Single Layer Perceptron | Sigmoid, BCE loss, gradient descent | 2-3 hrs |
+| 05 | MLP Forward Pass | Multi-layer networks, weight initialization | 2-3 hrs |
+| 06 | Backpropagation | Chain rule, backward pass, gradients | 3-4 hrs |
+| 07 | Activation Functions | ReLU, Sigmoid, Tanh, Softmax + gradients | 2-3 hrs |
+| 08 | Loss Functions | MSE, Cross-Entropy, Binary CE | 2-3 hrs |
+| 09 | Regularization | L2, Dropout, Batch Normalization | 2-3 hrs |
+| 10 | End-to-End MNIST | Complete MLP, 95% accuracy target | 3-4 hrs |
 
 ---
 
@@ -33,6 +35,8 @@ After completing this module, you will:
 2. Implement various activation functions with correct gradients
 3. Build loss functions for regression and classification
 4. Assemble a complete MLP that can learn
+5. Apply regularization techniques to prevent overfitting
+6. Train a network to 95%+ accuracy on MNIST
 
 ---
 
@@ -47,18 +51,20 @@ After completing this module, you will:
 ## 📈 Difficulty Progression
 
 ```
-Topic 04 (Linear)   ████░░░░░░ Medium
-Topic 05 (Acts)     █████░░░░░ Medium
-Topic 06 (Loss)     █████░░░░░ Medium
-Topic 07 (MLP)      ██████░░░░ Medium-Hard
-Topic 08 (Training) █████░░░░░ Medium
+Topic 04 (Perceptron)   ████░░░░░░ Medium
+Topic 05 (MLP)          █████░░░░░ Medium
+Topic 06 (Backprop)     ██████░░░░ Medium-Hard
+Topic 07 (Activations)  ████░░░░░░ Medium
+Topic 08 (Losses)       ████░░░░░░ Medium
+Topic 09 (Reg/BN)       █████░░░░░ Medium
+Topic 10 (MNIST)        ██████░░░░ Medium-Hard
 ```
 
 ---
 
 ## ⏱️ Estimated Time
 
-**Total**: 12-16 hours
+**Total**: 18-24 hours
 
 ---
 
@@ -66,12 +72,14 @@ Topic 08 (Training) █████░░░░░ Medium
 
 ```
 Module 01-Neural-Network-Core/
-├── README.md           # This file
-├── Topic 04-Linear-Layer/
-├── Topic 05-Activations/
-├── Topic 06-Loss-Functions/
-├── Topic 07-MLP-Assembly/
-└── Topic 08-Training-Loop/
+├── README.md
+├── Topic 04-Single-Layer-Perceptron/
+├── Topic 05-MLP-Forward-Pass/
+├── Topic 06-Backpropagation/
+├── Topic 07-Activation-Functions/
+├── Topic 08-Loss-Functions/
+├── Topic 09-Regularization/
+└── Topic 10-End-to-End-MNIST/
 ```
 
 ---
