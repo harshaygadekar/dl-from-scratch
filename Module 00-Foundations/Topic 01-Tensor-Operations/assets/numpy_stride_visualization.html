@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NumPy Stride Visualization</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #4cc9f0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: #252541;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section h2 {
+            color: #f72585;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .memory-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 1rem 0;
+        }
+        
+        .memory-cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .memory-cell:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        
+        .row-0 { background: linear-gradient(135deg, #4361ee, #3a0ca3); }
+        .row-1 { background: linear-gradient(135deg, #f72585, #b5179e); }
+        .row-2 { background: linear-gradient(135deg, #4cc9f0, #4895ef); }
+        .row-3 { background: linear-gradient(135deg, #7209b7, #560bad); }
+        
+        .info-box {
+            background: #16213e;
+            border-left: 4px solid #4cc9f0;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .stride-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .matrix-view {
+            display: inline-grid;
+            gap: 4px;
+            background: #16213e;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .matrix-row {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .interactive-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .highlight {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .code {
+            background: #0f0f23;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #4cc9f0;
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            text-align: center;
+            color: #f72585;
+            margin: 1rem 0;
+        }
+        
+        #output {
+            background: #0f0f23;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 NumPy Stride Visualization</h1>
+        
+        <div class="section">
+            <h2>1. Memory Layout: Row-Major (C-order)</h2>
+            <p>NumPy stores arrays in row-major order by default. Click cells to see their memory position.</p>
+            
+            <div class="info-box">
+arr = np.array([[0, 1, 2, 3],
+                [4, 5, 6, 7],
+                [8, 9, 10, 11]])  # Shape: (3, 4)
+
+# In memory (flat): [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+# Strides: (32, 8) for float64 → (4 items, 1 item) × 8 bytes
+            </div>
+            
+            <h3>Logical View (2D)</h3>
+            <div class="matrix-view" id="logical-view"></div>
+            
+            <div class="arrow">↓</div>
+            
+            <h3>Memory View (Flat)</h3>
+            <div class="memory-layout" id="memory-view"></div>
+            
+            <div id="output">Click a cell to see its memory location...</div>
+        </div>
+        
+        <div class="section">
+            <h2>2. Stride Tricks Demo</h2>
+            <p>See how changing strides creates views without copying data.</p>
+            
+            <div class="interactive-controls">
+                <button onclick="showTranspose()">Show Transpose</button>
+                <button onclick="showSlice()">Show Slice [::2, :]</button>
+                <button onclick="showSlidingWindow()">Show Sliding Window</button>
+                <button onclick="resetView()">Reset</button>
+            </div>
+            
+            <div class="stride-demo">
+                <div>
+                    <h3>Original Array</h3>
+                    <div class="info-box">
+                        <span id="original-info">Shape: (3, 4), Strides: (32, 8)</span>
+                    </div>
+                    <div class="matrix-view" id="original-matrix"></div>
+                </div>
+                <div>
+                    <h3>Transformed View</h3>
+                    <div class="info-box">
+                        <span id="transformed-info">Click a button to transform</span>
+                    </div>
+                    <div class="matrix-view" id="transformed-matrix"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>3. Broadcasting Visualization</h2>
+            <p>Watch how arrays stretch to match shapes during broadcast operations.</p>
+            
+            <div class="stride-demo">
+                <div>
+                    <h3>Array A: (3, 1)</h3>
+                    <div class="matrix-view" id="broadcast-a"></div>
+                </div>
+                <div>
+                    <h3>Array B: (1, 4)</h3>
+                    <div class="matrix-view" id="broadcast-b"></div>
+                </div>
+                <div>
+                    <h3>A + B: (3, 4)</h3>
+                    <div class="matrix-view" id="broadcast-result"></div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+# Broadcasting aligns from the right:
+A: (3, 1) → stretched to (3, 4) in the column direction
+B: (1, 4) → stretched to (3, 4) in the row direction
+Result: (3, 4)
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize data
+        const data = Array.from({length: 12}, (_, i) => i);
+        const rows = 3, cols = 4;
+        
+        // Create logical view
+        function createLogicalView() {
+            const container = document.getElementById('logical-view');
+            container.innerHTML = '';
+            container.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
+            
+            for (let i = 0; i < rows; i++) {
+                const row = document.createElement('div');
+                row.className = 'matrix-row';
+                for (let j = 0; j < cols; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = `memory-cell row-${i}`;
+                    cell.textContent = data[i * cols + j];
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.dataset.memPos = i * cols + j;
+                    cell.onclick = () => showCellInfo(i, j, i * cols + j);
+                    row.appendChild(cell);
+                }
+                container.appendChild(row);
+            }
+        }
+        
+        // Create memory view
+        function createMemoryView() {
+            const container = document.getElementById('memory-view');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < data.length; i++) {
+                const cell = document.createElement('div');
+                const row = Math.floor(i / cols);
+                cell.className = `memory-cell row-${row}`;
+                cell.textContent = data[i];
+                cell.id = `mem-${i}`;
+                container.appendChild(cell);
+            }
+        }
+        
+        function showCellInfo(row, col, memPos) {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+Cell [${row}, ${col}]:
+  Value: ${data[memPos]}
+  Memory position: ${memPos}
+  Byte offset: ${memPos * 8} (assuming float64)
+  
+Stride calculation:
+  row_stride (32) × row (${row}) + col_stride (8) × col (${col})
+  = ${32 * row} + ${8 * col} = ${32 * row + 8 * col} bytes
+  = position ${memPos} × 8 bytes per element
+            `;
+            
+            // Highlight in memory view
+            document.querySelectorAll('.memory-cell').forEach(c => c.classList.remove('highlight'));
+            document.getElementById(`mem-${memPos}`).classList.add('highlight');
+        }
+        
+        // Initialize stride demo
+        function initStrideDemo() {
+            const container = document.getElementById('original-matrix');
+            container.innerHTML = '';
+            container.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
+            
+            for (let i = 0; i < rows; i++) {
+                const row = document.createElement('div');
+                row.className = 'matrix-row';
+                for (let j = 0; j < cols; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = `memory-cell row-${i}`;
+                    cell.textContent = data[i * cols + j];
+                    row.appendChild(cell);
+                }
+                container.appendChild(row);
+            }
+        }
+        
+        function showTranspose() {
+            const container = document.getElementById('transformed-matrix');
+            container.innerHTML = '';
+            container.style.gridTemplateColumns = `repeat(${rows}, 50px)`;
+            
+            document.getElementById('transformed-info').textContent = 
+                'Transpose: Shape (4, 3), Strides (8, 32) - Just swap strides!';
+            
+            for (let i = 0; i < cols; i++) {
+                const row = document.createElement('div');
+                row.className = 'matrix-row';
+                for (let j = 0; j < rows; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = `memory-cell row-${j}`;
+                    cell.textContent = data[j * cols + i];
+                    row.appendChild(cell);
+                }
+                container.appendChild(row);
+            }
+        }
+        
+        function showSlice() {
+            const container = document.getElementById('transformed-matrix');
+            container.innerHTML = '';
+            container.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
+            
+            document.getElementById('transformed-info').textContent = 
+                'Slice [::2, :]: Shape (2, 4), Strides (64, 8) - Double row stride!';
+            
+            for (let i = 0; i < rows; i += 2) {
+                const row = document.createElement('div');
+                row.className = 'matrix-row';
+                for (let j = 0; j < cols; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = `memory-cell row-${i}`;
+                    cell.textContent = data[i * cols + j];
+                    row.appendChild(cell);
+                }
+                container.appendChild(row);
+            }
+        }
+        
+        function showSlidingWindow() {
+            const container = document.getElementById('transformed-matrix');
+            container.innerHTML = '';
+            
+            document.getElementById('transformed-info').textContent = 
+                'Sliding window (1D): Both strides = 8, creates overlapping view!';
+            
+            // Show 1D sliding window
+            const arr1d = [0, 1, 2, 3, 4, 5, 6, 7];
+            const windowSize = 3;
+            
+            container.style.gridTemplateColumns = `repeat(${windowSize}, 50px)`;
+            
+            for (let i = 0; i <= arr1d.length - windowSize; i++) {
+                const row = document.createElement('div');
+                row.className = 'matrix-row';
+                for (let j = 0; j < windowSize; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = `memory-cell row-${i % 4}`;
+                    cell.textContent = arr1d[i + j];
+                    row.appendChild(cell);
+                }
+                container.appendChild(row);
+            }
+        }
+        
+        function resetView() {
+            document.getElementById('transformed-matrix').innerHTML = '';
+            document.getElementById('transformed-info').textContent = 'Click a button to transform';
+        }
+        
+        // Initialize broadcasting demo
+        function initBroadcastDemo() {
+            // Array A: (3, 1)
+            const containerA = document.getElementById('broadcast-a');
+            containerA.innerHTML = '';
+            containerA.style.gridTemplateColumns = 'repeat(1, 50px)';
+            
+            [10, 20, 30].forEach((val, i) => {
+                const row = document.createElement('div');
+                row.className = 'matrix-row';
+                const cell = document.createElement('div');
+                cell.className = `memory-cell row-${i}`;
+                cell.textContent = val;
+                row.appendChild(cell);
+                containerA.appendChild(row);
+            });
+            
+            // Array B: (1, 4)
+            const containerB = document.getElementById('broadcast-b');
+            containerB.innerHTML = '';
+            containerB.style.gridTemplateColumns = 'repeat(4, 50px)';
+            
+            const rowB = document.createElement('div');
+            rowB.className = 'matrix-row';
+            [1, 2, 3, 4].forEach((val, i) => {
+                const cell = document.createElement('div');
+                cell.className = 'memory-cell row-1';
+                cell.textContent = val;
+                rowB.appendChild(cell);
+            });
+            containerB.appendChild(rowB);
+            
+            // Result: (3, 4)
+            const containerR = document.getElementById('broadcast-result');
+            containerR.innerHTML = '';
+            containerR.style.gridTemplateColumns = 'repeat(4, 50px)';
+            
+            const A = [10, 20, 30];
+            const B = [1, 2, 3, 4];
+            
+            A.forEach((a, i) => {
+                const row = document.createElement('div');
+                row.className = 'matrix-row';
+                B.forEach((b, j) => {
+                    const cell = document.createElement('div');
+                    cell.className = `memory-cell row-${i}`;
+                    cell.textContent = a + b;
+                    row.appendChild(cell);
+                });
+                containerR.appendChild(row);
+            });
+        }
+        
+        // Initialize all
+        createLogicalView();
+        createMemoryView();
+        initStrideDemo();
+        initBroadcastDemo();
+    </script>
+</body>
+</html>
