@@ -1,119 +1,34 @@
-# Module 03: RNNs & Sequences
+# Module 03: Sequence Models
 
-> Process sequential data with recurrent architectures.
-
----
-
-## 📋 Overview
-
-This module covers recurrent neural networks and sequence modeling:
-- RNN cells and backpropagation through time
-- LSTM and GRU architectures
-- Sequence-to-sequence models
-- Embeddings
+> Implement recurrent models and attention bridges before transformers.
 
 ---
 
-## 📚 Topics
+## Overview
+
+This module introduces temporal modeling from first principles:
+- Vanilla recurrence and BPTT
+- LSTM/GRU gating behavior
+- Sequence masking and variable-length handling
+- Encoder-decoder sequence models
+- Bahdanau attention as the transformer bridge
+
+---
+
+## Topics
 
 | Topic | Name | Description | Duration |
 |-------|------|-------------|----------|
-| 14 | RNN Cell | Basic recurrence and BPTT | 3-4 hrs |
-| 15 | LSTM | Long short-term memory | 3-4 hrs |
-| 16 | GRU | Gated recurrent unit | 2-3 hrs |
-| 17 | Embeddings | Word → vector representations | 2-3 hrs |
-| 18 | Seq2Seq | Encoder-decoder architecture | 3-4 hrs |
-| 19 | Attention Basics | Pre-transformer attention | 3-4 hrs |
+| 18 | Vanilla RNN | Forward/backward through time | 2-3 hrs |
+| 19 | LSTM Gates | Cell-state gated recurrence | 2-3 hrs |
+| 20 | GRU Variant | Compact gated recurrent design | 2-3 hrs |
+| 21 | Bidirectional RNNs & Masking | Variable-length sequence handling | 2-3 hrs |
+| 22 | Word Embeddings (Word2Vec Logic) | Skip-gram and negative sampling | 2-3 hrs |
+| 23 | Seq2Seq Encoder-Decoder | Conditional generation loop | 2-3 hrs |
+| 24 | Attention Mechanism (Bahdanau) | Alignment scores and context vectors | 3-4 hrs |
 
 ---
 
-## 🎯 Learning Objectives
+## Milestone
 
-After completing this module, you will:
-1. Understand how RNNs maintain hidden state
-2. Implement LSTM gates and cell states
-3. Build sequence-to-sequence models
-4. Implement basic attention mechanisms
-
----
-
-## 🔧 Prerequisites
-
-- ✅ Module 01: Neural Network Core
-- ✅ Understanding of sequences and time series
-- ✅ Matrix operations
-
----
-
-## 📈 Difficulty Progression
-
-```
-Topic 14 (RNN)      ██████░░░░ Medium-Hard
-Topic 15 (LSTM)     ████████░░ Hard
-Topic 16 (GRU)      ██████░░░░ Medium-Hard
-Topic 17 (Embed)    █████░░░░░ Medium
-Topic 18 (Seq2Seq)  ███████░░░ Hard
-Topic 19 (Attn)     ████████░░ Hard
-```
-
----
-
-## ⏱️ Estimated Time
-
-**Total**: 17-22 hours
-
----
-
-## 🗂️ Directory Structure
-
-```
-Module 03-RNNs-Sequences/
-├── README.md           # This file
-├── Topic 14-RNN-Cell/
-├── Topic 15-LSTM/
-├── Topic 16-GRU/
-├── Topic 17-Embeddings/
-├── Topic 18-Seq2Seq/
-└── Topic 19-Attention-Basics/
-```
-
----
-
-## 🏆 Module Milestone
-
-By the end of this module, you should be able to:
-
-```python
-# Build a character-level language model
-vocab_size = 50
-embed_dim = 64
-hidden_dim = 128
-
-embedding = Embedding(vocab_size, embed_dim)
-lstm = LSTM(embed_dim, hidden_dim)
-output = Linear(hidden_dim, vocab_size)
-
-def forward(chars):
-    x = embedding(chars)           # [seq, batch, embed]
-    hidden = lstm.init_hidden()
-    outputs = []
-    for t in range(len(chars)):
-        h, hidden = lstm(x[t], hidden)
-        outputs.append(output(h))
-    return outputs
-
-# Generate text character by character!
-```
-
----
-
-## 🔍 Key Interview Topics
-
-- Why do RNNs suffer from vanishing gradients?
-- How do LSTM gates solve this?
-- What makes GRU simpler than LSTM?
-- How does attention help with long sequences?
-
----
-
-*"Sequences are the language of time."*
+Topic 24 should produce a working attention-based seq2seq baseline that is ready to transition into transformer attention patterns.

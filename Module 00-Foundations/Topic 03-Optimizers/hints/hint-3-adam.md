@@ -86,4 +86,4 @@ p.data -= self.lr * self.weight_decay * p.data
 3. **Not using math.sqrt**: NumPy's sqrt might not work on scalars
 
 ## Still Stuck?
-→ Look at `solutions/level02-vectorized.py` for the complete implementation
+→ Look at `solutions/level02_vectorized.py` for the complete implementation

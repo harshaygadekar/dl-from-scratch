@@ -85,10 +85,10 @@ Topic 01-Tensor-Operations/
 │   ├── hint-2-broadcasting.md  # Broadcasting details
 │   └── hint-3-memory.md  # Memory optimization
 ├── solutions/
-│   ├── level01-naive.py          # For-loops, readable
-│   ├── level02-vectorized.py     # NumPy broadcast ops
-│   ├── level03-memory-efficient.py  # Stride tricks
-│   └── level04-pytorch-reference.py  # Verification
+│   ├── level01_naive.py          # For-loops, readable
+│   ├── level02_vectorized.py     # NumPy broadcast ops
+│   ├── level03_memory_efficient.py  # Stride tricks
+│   └── level04_pytorch_reference.py  # Verification
 ├── tests/
 │   ├── test_basic.py     # Core functionality
 │   ├── test_edge.py      # Edge cases
@@ -111,7 +111,7 @@ Topic 01-Tensor-Operations/
 Start with Level 1 (naive implementation):
 ```bash
 # Create your solution file
-cp solutions/level01-naive.py my_solution.py
+cp solutions/level01_naive.py my_solution.py
 
 # Test it
 pytest tests/test_basic.py -v
@@ -124,7 +124,7 @@ Once tests pass, optimize:
 
 ### Step 4: Verify Against PyTorch
 ```bash
-python solutions/level04-pytorch-reference.py
+python solutions/level04_pytorch_reference.py
 ```
 
 ---
@@ -144,7 +144,7 @@ python solutions/level04-pytorch-reference.py
 
 Totally stuck after 3+ hours? It's okay to:
 
-1. ✅ Study `solutions/level02-vectorized.py` for broadcast patterns
+1. ✅ Study `solutions/level02_vectorized.py` for broadcast patterns
 2. ✅ Move to Topic 02 and return later
 3. ❌ Copy-paste without understanding (defeats the purpose)
 

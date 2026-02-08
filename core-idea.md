@@ -46,8 +46,8 @@ Every day has 4 solution tiers in `solutions/`:
 - **topic 05**: MLP Forward Pass (Xavier/Kaiming init)
 - **topic 06**: Backpropagation Implementation (manual chain rule)
 - **topic 07**: Activations & Initialization (ReLU variants, dead neurons)
-- **topic 08**: Regularization (L2, Dropout - inverted implementation)
-- **topic 09**: Batch Normalization (running stats, train vs eval mode)
+- **topic 08**: Loss Functions (MSE, Cross-Entropy, Binary CE)
+- **topic 09**: Regularization (L2, Dropout, BatchNorm train/eval behavior)
 - **topic 10**: End-to-End MNIST (95% accuracy, &lt;10 min CPU training)
 
 ### Module 2: CNNs (Spatial Reasoning)

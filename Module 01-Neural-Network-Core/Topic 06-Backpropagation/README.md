@@ -96,10 +96,10 @@ Topic 06-Backpropagation/
 │   ├── hint-2-linear-backward.md
 │   └── hint-3-full-network.md
 ├── solutions/
-│   ├── level01-naive.py
-│   ├── level02-vectorized.py
-│   ├── level03-memory-efficient.py
-│   └── level04-pytorch-reference.py
+│   ├── level01_naive.py
+│   ├── level02_vectorized.py
+│   ├── level03_memory_efficient.py
+│   └── level04_pytorch_reference.py
 ├── tests/
 │   ├── test_basic.py
 │   ├── test_edge.py

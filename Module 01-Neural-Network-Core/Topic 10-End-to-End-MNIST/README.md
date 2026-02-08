@@ -41,10 +41,10 @@ Topic 10-End-to-End-MNIST/
 │   ├── hint-2-model-architecture.md
 │   └── hint-3-training-loop.md
 ├── solutions/
-│   ├── level01-naive.py
-│   ├── level02-vectorized.py
-│   ├── level03-memory-efficient.py
-│   └── level04-pytorch-reference.py
+│   ├── level01_naive.py
+│   ├── level02_vectorized.py
+│   ├── level03_memory_efficient.py
+│   └── level04_pytorch_reference.py
 ├── tests/
 │   ├── test_basic.py
 │   ├── test_edge.py

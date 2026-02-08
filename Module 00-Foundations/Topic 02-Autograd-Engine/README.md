@@ -112,10 +112,10 @@ Topic 02-Autograd-Engine/
 │   ├── hint-2-backward.md    # Backprop implementation
 │   └── hint-3-topological.md # Graph traversal
 ├── solutions/
-│   ├── level01-naive.py          # Basic ops only
-│   ├── level02-vectorized.py     # More operations
-│   ├── level03-memory-efficient.py  # Optimized
-│   └── level04-pytorch-reference.py  # Verification
+│   ├── level01_naive.py          # Basic ops only
+│   ├── level02_vectorized.py     # More operations
+│   ├── level03_memory_efficient.py  # Optimized
+│   └── level04_pytorch_reference.py  # Verification
 ├── tests/
 │   ├── test_basic.py     # Core functionality
 │   ├── test_edge.py      # Edge cases
@@ -154,7 +154,7 @@ pytest tests/test_basic.py -v
 
 ### Step 4: Verify Against PyTorch
 ```bash
-python solutions/level04-pytorch-reference.py
+python solutions/level04_pytorch_reference.py
 ```
 
 ---

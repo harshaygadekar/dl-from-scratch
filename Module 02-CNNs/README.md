@@ -1,118 +1,72 @@
-# Module 02: Convolutional Neural Networks
+# Module 02: Convolutional Networks
 
-> Master spatial pattern recognition with CNNs.
-
----
-
-## 📋 Overview
-
-This module covers convolutional neural networks, the backbone of computer vision:
-- Convolution operations
-- Pooling layers
-- Building complete CNN architectures
-- Batch normalization
+> Build CNN primitives from scratch, then train a CIFAR-10 classifier.
 
 ---
 
-## 📚 Topics
+## Overview
+
+This module focuses on spatial modeling and efficient convolution implementations:
+- Naive sliding-window convolutions
+- Im2Col and vectorized kernels
+- Pooling and stride logic
+- Residual blocks and modern convolution variants
+- Normalization alternatives for small-batch training
+
+---
+
+## Topics
 
 | Topic | Name | Description | Duration |
 |-------|------|-------------|----------|
-| 09 | Convolution | im2col, convolution forward/backward | 3-4 hrs |
-| 10 | Pooling | Max pool, average pool, strided | 2-3 hrs |
-| 11 | CNN Architecture | LeNet-style networks | 3-4 hrs |
-| 12 | Batch Normalization | Normalize activations | 2-3 hrs |
-| 13 | Dropout | Regularization technique | 2-3 hrs |
+| 11 | Conv2D Sliding Window | Naive conv with padding/stride | 2-3 hrs |
+| 12 | Im2Col Vectorization | Convert conv into matrix multiplication | 2-3 hrs |
+| 13 | Pooling & Strides | Max/avg pooling and backward masks | 2-3 hrs |
+| 14 | ResNet Skip Connections | Residual blocks and projection shortcuts | 2-3 hrs |
+| 15 | Modern Convolutions | Depthwise, pointwise, dilated convs | 2-3 hrs |
+| 16 | Advanced Normalizations | LayerNorm, GroupNorm, InstanceNorm | 2-3 hrs |
+| 17 | CIFAR-10 From Scratch | End-to-end image training milestone | 3-4 hrs |
 
 ---
 
-## 🎯 Learning Objectives
+## Learning Objectives
 
-After completing this module, you will:
-1. Understand how convolutions extract spatial features
-2. Implement efficient convolution using im2col
-3. Build complete CNN architectures from scratch
-4. Apply normalization and regularization techniques
-
----
-
-## 🔧 Prerequisites
-
-- ✅ Module 01: Neural Network Core
-- ✅ Understanding of image representation
-- ✅ Matrix operations and reshaping
+After this module, you should be able to:
+1. Implement and debug Conv2D kernels in pure NumPy.
+2. Explain accuracy/speed/memory tradeoffs between naive and im2col variants.
+3. Implement residual blocks and normalization choices without framework helpers.
+4. Train a small CNN on CIFAR-10 with reproducible preprocessing.
 
 ---
 
-## 📈 Difficulty Progression
+## Prerequisites
 
-```
-Topic 09 (Conv)     ███████░░░ Hard
-Topic 10 (Pool)     █████░░░░░ Medium
-Topic 11 (CNN)      ██████░░░░ Medium-Hard
-Topic 12 (BatchNorm)███████░░░ Hard
-Topic 13 (Dropout)  ████░░░░░░ Easy-Medium
-```
+- Module 00 and Module 01 complete.
+- Comfortable with tensor shapes `(N, C, H, W)`.
+- Basic understanding of image channels and kernels.
 
 ---
 
-## ⏱️ Estimated Time
-
-**Total**: 13-17 hours
-
----
-
-## 🗂️ Directory Structure
+## Directory Structure
 
 ```
 Module 02-CNNs/
-├── README.md           # This file
-├── Topic 09-Convolution/
-├── Topic 10-Pooling/
-├── Topic 11-CNN-Architecture/
-├── Topic 12-Batch-Normalization/
-└── Topic 13-Dropout/
+├── README.md
+├── Topic 11-Conv2D-Sliding-Window/
+├── Topic 12-Im2Col-Vectorization/
+├── Topic 13-Pooling-Strides/
+├── Topic 14-ResNet-Skip-Connections/
+├── Topic 15-Modern-Convolutions/
+├── Topic 16-Advanced-Normalizations/
+└── Topic 17-CIFAR10-From-Scratch/
 ```
 
 ---
 
-## 🏆 Module Milestone
+## Milestone
 
-By the end of this module, you should be able to:
-
-```python
-# Build a LeNet-style CNN
-cnn = Sequential([
-    Conv2d(1, 6, kernel_size=5, padding=2),
-    ReLU(),
-    MaxPool2d(2),
-    Conv2d(6, 16, kernel_size=5),
-    ReLU(),
-    MaxPool2d(2),
-    Flatten(),
-    Linear(16 * 5 * 5, 120),
-    ReLU(),
-    Linear(120, 84),
-    ReLU(),
-    Linear(84, 10)
-])
-
-# Train on MNIST
-for x, y in mnist_loader:
-    logits = cnn(x)
-    loss = cross_entropy(logits, y)
-    # ... train
-```
+By Topic 17, you should have a full NumPy CNN training pipeline over CIFAR-10 data.
 
 ---
 
-## 🔍 Key Interview Topics
-
-- Why convolutions over fully connected layers?
-- How does im2col work?
-- What's the receptive field?
-- Batch norm at train vs inference time
-
----
-
-*"Convolutions see the world in patterns, not pixels."*
+*Module 02 is complete when Topics 11-17 each have runnable starter code, tests, and hints.*

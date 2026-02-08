@@ -22,8 +22,8 @@ Track your progress through the DL-From-Scratch curriculum.
 - [ ] **Topic 05**: MLP Forward Pass
 - [ ] **Topic 06**: Backpropagation Implementation
 - [ ] **Topic 07**: Activation Functions & Initialization
-- [ ] **Topic 08**: Regularization
-- [ ] **Topic 09**: Batch Normalization
+- [ ] **Topic 08**: Loss Functions
+- [ ] **Topic 09**: Regularization
 - [ ] **Topic 10**: End-to-End MNIST 🎯 *Milestone: 95% accuracy*
 
 ---

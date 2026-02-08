@@ -62,3 +62,6 @@ Thumbs.db
 # Keep assets though
 !assets/*.png
 !assets/*.html
+
+# Local datasets/cache
+data/

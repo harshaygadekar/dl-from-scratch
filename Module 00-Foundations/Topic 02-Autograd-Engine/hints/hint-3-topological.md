@@ -103,4 +103,4 @@ Expected output for `z = (x + y) * x`:
 ```
 
 ## Still Stuck?
-→ Look at `solutions/level01-naive.py` for the complete implementation
+→ Look at `solutions/level01_naive.py` for the complete implementation

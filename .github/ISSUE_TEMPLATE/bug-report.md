@@ -12,7 +12,7 @@ assignees: ''
 <!-- e.g., Topic 09 -->
 
 **File with Bug**: 
-<!-- e.g., solutions/level02-vectorized.py -->
+<!-- e.g., solutions/level02_vectorized.py -->
 
 ---
 
@@ -48,7 +48,7 @@ assignees: ''
 - **NumPy Version**: 
 - **Operating System**: 
 - **How you ran the code**: 
-  <!-- e.g., python solutions/level02-vectorized.py OR pytest tests/test_basic.py -->
+  <!-- e.g., python solutions/level02_vectorized.py OR pytest tests/test_basic.py -->
 
 ---
 

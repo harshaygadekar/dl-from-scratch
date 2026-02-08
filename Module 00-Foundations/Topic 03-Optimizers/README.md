@@ -92,10 +92,10 @@ Topic 03-Optimizers/
 │   ├── hint-2-momentum.md    # Adding momentum
 │   └── hint-3-adam.md        # Adam algorithm
 ├── solutions/
-│   ├── level01-naive.py          # Basic SGD only
-│   ├── level02-vectorized.py     # All optimizers
-│   ├── level03-memory-efficient.py  # Optimized
-│   └── level04-pytorch-reference.py  # Verification
+│   ├── level01_naive.py          # Basic SGD only
+│   ├── level02_vectorized.py     # All optimizers
+│   ├── level03_memory_efficient.py  # Optimized
+│   └── level04_pytorch_reference.py  # Verification
 ├── tests/
 │   ├── test_basic.py     # Core functionality
 │   ├── test_edge.py      # Edge cases

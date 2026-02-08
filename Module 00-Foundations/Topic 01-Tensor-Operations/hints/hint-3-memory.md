@@ -86,4 +86,4 @@ print(x.strides)  # Bytes to step in each dimension
 4. **Use float32**: Half the memory of float64, often sufficient
 
 ## Still Stuck?
-→ Look at `solutions/level03-memory-efficient.py` for complete examples
+→ Look at `solutions/level03_memory_efficient.py` for complete examples

@@ -28,10 +28,10 @@ dl-from-scratch/
 │   │   ├── intuition.md         # Why tensors matter
 │   │   ├── math-refresh.md      # Broadcasting math
 │   │   ├── solutions/           # Progressive disclosure
-│   │   │   ├── level01-naive.py
-│   │   │   ├── level02-vectorized.py
-│   │   │   ├── level03-memory-efficient.py
-│   │   │   └── level04-pytorch-reference.py
+│   │   │   ├── level01_naive.py
+│   │   │   ├── level02_vectorized.py
+│   │   │   ├── level03_memory_efficient.py
+│   │   │   └── level04_pytorch_reference.py
 │   │   ├── tests/
 │   │   │   ├── test_basic.py    # Shape checks
 │   │   │   ├── test_edge.py     # Empty arrays, dims=1
@@ -397,7 +397,7 @@ Tomorrow you'll build [teaser for next topic]
 
 # examples of different files per topics/day:
 
-## how solutions should look like: solutions/level01-naive.py
+## how solutions should look like: solutions/level01_naive.py
 
 """
 Level 1: Naive Implementation
@@ -424,7 +424,7 @@ if __name__ == "__main__":
     print(f"Output: {out}, Shape: {out.shape}")
     assert out.shape == (expected_shape), "Shape mismatch!"
 
-## solutions/level04-pytorch-reference.py
+## solutions/level04_pytorch_reference.py
 
 """
 PyTorch Reference Implementation
@@ -472,7 +472,7 @@ Performance Tests: Runtime < threshold (prevent O(n³) solutions where O(n²) ex
 
 ## Continuous Integration
 GitHub Actions runs all tests on Python 3.8, 3.9, 3.10, 3.11
-Tests verify that level04-pytorch-reference.py matches level03-memory-efficient.py within tolerance
+Tests verify that level04_pytorch_reference.py matches level03_memory_efficient.py within tolerance
 Prevents solution drift over PRs
 
 ## 6. Community & Maintenance

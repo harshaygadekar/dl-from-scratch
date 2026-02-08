@@ -41,10 +41,10 @@ Topic 07-Activation-Functions/
 │   ├── hint-2-sigmoid-tanh.md
 │   └── hint-3-softmax.md
 ├── solutions/
-│   ├── level01-naive.py
-│   ├── level02-vectorized.py
-│   ├── level03-memory-efficient.py
-│   └── level04-pytorch-reference.py
+│   ├── level01_naive.py
+│   ├── level02_vectorized.py
+│   ├── level03_memory_efficient.py
+│   └── level04_pytorch_reference.py
 ├── tests/
 │   ├── test_basic.py
 │   ├── test_edge.py
