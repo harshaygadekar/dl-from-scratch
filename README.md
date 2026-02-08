@@ -18,11 +18,18 @@
 
 **34 topics** • **2-3 hours/day** • **Prerequisites:** Python, Linear Algebra 101, Calculus I
 
+## 📌 Current Status
+
+- Curriculum fully scaffolded across **Modules 00 to 04** (**Topics 01 to 34**)
+- Every topic includes `README.md`, `hints/hint-1..3`, `tests/test_basic.py` + `test_edge.py` + `test_stress.py`, and `solutions/level01..level04`
+- Hint content is now standardized with detailed scaffolding across later modules (CNN advanced topics, RNNs, Transformers)
+- Recent validation run completed successfully across all topics (`01-34`) in a clean virtual environment
+
 ## 🚀 Quick Start
 
 ```bash
 # Clone and setup
-git clone https://github.com/YOUR_USERNAME/dl-from-scratch.git
+git clone https://github.com/harshaygadekar/dl-from-scratch.git
 cd dl-from-scratch
 pip install -r requirements.txt
 
@@ -103,6 +110,16 @@ Every topic has 4 solution tiers:
 
 **Topic 02 Escape Hatch**: If autograd blocks you, use `utils/autograd_stub.py` and return later.
 
+## 🧭 Suggested Learning Flow
+
+1. Work **module-by-module** (`00 -> 01 -> 02 -> 03 -> 04`)
+2. For each topic, attempt `level01` first, use hints progressively (`hint-1 -> hint-2 -> hint-3`), then run tests
+3. Move to `level02`/`level03` only after `level01` passes
+4. Use `level04` as reference verification, not as first attempt
+5. Keep a short implementation log: what failed, what changed, what you learned
+
+This sequencing keeps understanding ahead of optimization and reduces confusion across dependencies.
+
 ## 📊 Track Your Progress
 
 ```bash
@@ -129,6 +146,9 @@ We love Karpathy's content! This is **complementary**, not competitive:
 ```bash
 # Run tests for a specific topic
 python utils/test_runner.py --day 05
+
+# List all topics
+python utils/test_runner.py --list
 
 # Verify your setup
 python utils/test_runner.py --verify-setup
