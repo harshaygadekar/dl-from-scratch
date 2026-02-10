@@ -1,6 +1,7 @@
 # Topic 20 Questions
 
-1. What are the exact input/output tensor shapes for your core API?
-2. Which part is most error-prone and how will you test it?
-3. How does your vectorized version differ from the naive version?
-4. What would you compare against in level04 reference mode?
+1. For GRU Variant, what exact input/output shape contract must hold at each major step?
+2. In 'gru_step, gru_forward', which operation is most error-prone and why?
+3. What deterministic test (seed + input) would expose this failure mode: "Using update gate with reversed interpolation flips learning dynamics and stalls convergence."?
+4. Which Level 2 or Level 3 optimization gives the best gain without changing numerical behavior?
+5. If outputs diverge between Level 1 and Level 2, what is your first debug probe and expected value?

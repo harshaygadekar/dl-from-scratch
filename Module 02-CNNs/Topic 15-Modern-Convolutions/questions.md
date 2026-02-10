@@ -1,6 +1,7 @@
 # Topic 15 Questions
 
-1. Implement the minimum working function set in `level01_naive.py`.
-2. Add vectorization in `level02_vectorized.py` without changing outputs.
-3. Improve either memory or runtime in `level03_memory_efficient.py`.
-4. Compare with PyTorch in `level04_pytorch_reference.py` when available.
+1. For Modern Convolutions, what exact input/output shape contract must hold at each major step?
+2. In 'depthwise_conv2d, pointwise_conv2d, dilated_conv2d', which operation is most error-prone and why?
+3. What deterministic test (seed + input) would expose this failure mode: "Depthwise convolution incorrectly mixes channels, turning grouped conv into standard conv."?
+4. Which Level 2 or Level 3 optimization gives the best gain without changing numerical behavior?
+5. If outputs diverge between Level 1 and Level 2, what is your first debug probe and expected value?

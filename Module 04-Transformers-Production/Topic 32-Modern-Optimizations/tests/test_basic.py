@@ -18,3 +18,9 @@ def test_checkpoint_plan_pattern():
 
 def test_flops_positive():
     assert estimate_attention_flops(128, 64) > 0
+
+
+
+def test_phase_c_basic_32_flops_formula_exact():
+    assert estimate_attention_flops(seq_len=16, d_model=8) == 2 * (16 ** 2) * 8
+

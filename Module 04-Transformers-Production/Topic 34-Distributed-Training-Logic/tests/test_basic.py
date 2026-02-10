@@ -26,3 +26,14 @@ def test_sgd_update_changes_param():
     g = np.array([0.5, 0.5], dtype=np.float32)
     p2 = sgd_update(p, g, lr=0.1)
     assert np.all(p2 < p)
+
+
+
+def test_phase_c_basic_34_average_gradients_three_workers():
+    g = average_gradients([
+        np.full((2, 2), 1.0, dtype=np.float32),
+        np.full((2, 2), 3.0, dtype=np.float32),
+        np.full((2, 2), 5.0, dtype=np.float32),
+    ])
+    np.testing.assert_allclose(g, 3.0)
+

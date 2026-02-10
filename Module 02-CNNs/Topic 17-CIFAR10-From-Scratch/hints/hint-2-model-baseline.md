@@ -2,33 +2,30 @@
 
 ## Goal In This Hint
 
-Assemble a full training pipeline and baseline model for CIFAR10 end-to-end learning.
+Stabilize algorithm branches (masking, padding, stride, gating, or context flow) for non-trivial cases.
 
-## Core Idea
+## Topic-Specific Mini Example
 
-A strong baseline is simple, reproducible, and testable before adding architecture complexity.
-Before coding, keep a shape trace next to your implementation and update it whenever you reshape, transpose, split, or merge axes.
+- CIFAR batch (64,32,32,3) normalized then model-ready tensor conversion is consistent each epoch.
+- Verify the related API path: load_cifar10, CIFAR10DataLoader, random_crop, random_horizontal_flip
 
-## Implementation Plan
+## Concrete Failure Mode
 
-1. Integrate the component into the full block/pipeline while preserving axis order.
-2. Handle optional logic explicitly (masks, padding, teacher forcing, residual branch, cache path).
-3. Validate against a simple reference implementation on random seeds and edge sizes.
-4. Log one intermediate tensor statistic (mean/std/min/max) to catch silent failures early.
+- Branch-specific logic is applied on the wrong axis or timestep, producing plausible but incorrect outputs.
 
-## Common Mistakes
+## Debugging Checklist
 
-- Mixing axis conventions (`NCHW` vs `NHWC`, `B,T,H,D` vs `B,H,T,D`) and debugging values before fixing shape contracts.
-- Applying residual, normalization, masking, or scaling in the wrong order for the intended algorithm.
-- Skipping finite checks (`NaN`/`Inf`) during development and finding instability only after many training steps.
-- Broadcasting can succeed with wrong semantics; verify intended dimensions, not just runnable code.
+- Set a deterministic seed and record one known-good tensor output.
+- Assert shape and dtype after every transformation step.
+- Check finite values (no NaN/Inf) after normalization, masking, or exponentials.
+- Run at least one batch_size=1 and one irregular-size case before scaling up.
 
-## Quick Self-Check
+## Exit Criteria
 
-- Can you state the expected shape and dtype at every major line?
-- Do tiny deterministic tests and random-input tests both pass?
-- Do masked/optional branches produce identical results to the reference in supported cases?
+- Basic case passes with exact or near-exact expectation.
+- One edge case is validated with explicit assertion.
+- You can explain why this hint prevents the listed failure mode.
 
 ## Next
 
-Continue with [Hint 3 - Training Checklist](hint-3-training-checklist.md) after you can pass the quick checks below.
+Continue with Hint 3 using file 'hint-3-training-checklist.md' after passing the checks below.

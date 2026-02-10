@@ -2,33 +2,30 @@
 
 ## Goal In This Hint
 
-Split model dimensions into multiple heads, compute attention per head, then merge correctly.
+Optimize runtime and memory only after matching baseline numerics, then freeze a regression check.
 
-## Core Idea
+## Topic-Specific Mini Example
 
-Broadcast masks to match attention score shape exactly before adding mask bias.
-Before coding, keep a shape trace next to your implementation and update it whenever you reshape, transpose, split, or merge axes.
+- Input (2,6,16), heads=4 -> split (2,4,6,4) -> combine back (2,6,16).
+- Verify the related API path: split_heads, combine_heads, multi_head_attention, multi_head_attention_vectorized
 
-## Implementation Plan
+## Concrete Failure Mode
 
-1. Stress test numerical stability with extreme logits/activations and long sequences when applicable.
-2. Add guardrails (`epsilon`, clipping, max-shifted softmax, finite checks) at known unstable points.
-3. Profile runtime/memory on realistic sizes and confirm optimization does not change outputs.
-4. Write one regression test for the hardest bug you hit while implementing this topic.
+- An optimization changes semantics and drifts from Level 1 outputs beyond tolerance.
 
-## Common Mistakes
+## Debugging Checklist
 
-- Mixing axis conventions (`NCHW` vs `NHWC`, `B,T,H,D` vs `B,H,T,D`) and debugging values before fixing shape contracts.
-- Applying residual, normalization, masking, or scaling in the wrong order for the intended algorithm.
-- Skipping finite checks (`NaN`/`Inf`) during development and finding instability only after many training steps.
-- Optimization before correctness usually bakes in subtle errors that are expensive to unwind.
+- Set a deterministic seed and record one known-good tensor output.
+- Assert shape and dtype after every transformation step.
+- Check finite values (no NaN/Inf) after normalization, masking, or exponentials.
+- Compare Level 3 vs Level 1 with fixed seed and assert max error within tolerance.
 
-## Quick Self-Check
+## Exit Criteria
 
-- Can you state the expected shape and dtype at every major line?
-- Do tiny deterministic tests and random-input tests both pass?
-- If you disable optimizations, do outputs still match within tolerance?
+- Basic case passes with exact or near-exact expectation.
+- One edge case is validated with explicit assertion.
+- You can explain why this hint prevents the listed failure mode.
 
 ## Next
 
-After this hint, run the topic tests and inspect at least one case end-to-end (input -> intermediate -> output) before moving on.
+After this hint, run all topic tests and preserve one failing case as a permanent regression test.

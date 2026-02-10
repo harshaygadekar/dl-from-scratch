@@ -9,3 +9,9 @@ from level03_memory_efficient import allreduce_volume_bytes
 def test_allreduce_volume_positive():
     vol = allreduce_volume_bytes(num_params=10_000_000, bytes_per_param=2, world_size=8)
     assert vol > 0
+
+
+
+def test_phase_c_stress_34_world_size_one_has_zero_overhead():
+    assert allreduce_volume_bytes(num_params=10_000, bytes_per_param=2, world_size=1) == 0
+

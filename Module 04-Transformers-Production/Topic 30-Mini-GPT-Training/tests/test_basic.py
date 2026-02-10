@@ -30,3 +30,16 @@ def test_bigram_forward_shape_and_loss_finite():
     loss = cross_entropy_from_logits(logits, inp)
     assert logits.shape == (b, t, v)
     assert np.isfinite(loss)
+
+
+from level02_vectorized import generate_bigram
+
+
+def test_phase_c_basic_30_generation_length_and_range():
+    np.random.seed(23)
+    vocab = 12
+    table = init_bigram_logits(vocab)
+    seq = generate_bigram(start_token=3, logits_table=table, max_new_tokens=15)
+    assert len(seq) == 16
+    assert min(seq) >= 0 and max(seq) < vocab
+

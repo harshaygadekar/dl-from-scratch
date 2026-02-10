@@ -1,6 +1,7 @@
 # Topic 21 Questions
 
-1. What are the exact input/output tensor shapes for your core API?
-2. Which part is most error-prone and how will you test it?
-3. How does your vectorized version differ from the naive version?
-4. What would you compare against in level04 reference mode?
+1. For Bidirectional RNNs Masking, what exact input/output shape contract must hold at each major step?
+2. In 'bidirectional_rnn_forward, apply_sequence_mask', which operation is most error-prone and why?
+3. What deterministic test (seed + input) would expose this failure mode: "Mask applied after recurrence leaks padded tokens into hidden states."?
+4. Which Level 2 or Level 3 optimization gives the best gain without changing numerical behavior?
+5. If outputs diverge between Level 1 and Level 2, what is your first debug probe and expected value?

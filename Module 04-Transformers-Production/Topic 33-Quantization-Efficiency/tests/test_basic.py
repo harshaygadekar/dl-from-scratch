@@ -21,3 +21,14 @@ def test_fake_quant_finite():
     s = symmetric_quant_params(x)
     y = fake_quantize(x, s)
     assert np.isfinite(y).all()
+
+
+
+def test_phase_c_basic_33_roundtrip_error_bound():
+    np.random.seed(41)
+    x = np.random.randn(128).astype(np.float32)
+    s = symmetric_quant_params(x)
+    y = dequantize_int8(quantize_int8(x, s), s)
+    mae = np.mean(np.abs(x - y))
+    assert mae < 0.03
+

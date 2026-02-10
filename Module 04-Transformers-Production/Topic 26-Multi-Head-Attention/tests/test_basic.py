@@ -20,3 +20,13 @@ def test_mha_output_shape():
     w = np.random.randn(d, d).astype(np.float32) * 0.1
     out = multi_head_attention(x, w, w, w, w, num_heads=h)
     assert out.shape == (b, t, d)
+
+
+
+def test_phase_c_shape_26_split_expected_layout():
+    x = np.arange(2 * 3 * 8, dtype=np.float32).reshape(2, 3, 8)
+    heads = split_heads(x, num_heads=2)
+    assert heads.shape == (2, 2, 3, 4)
+    back = combine_heads(heads)
+    np.testing.assert_allclose(back, x)
+

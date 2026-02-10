@@ -11,3 +11,14 @@ def test_cache_reuses_arrays():
     a = cache.get(128, 64)
     b = cache.get(128, 64)
     assert a is b
+
+
+
+def test_phase_c_cache_27_distinct_keys_allocated_once_each():
+    cache = PositionalEncodingCache()
+    a = cache.get(128, 64)
+    b = cache.get(256, 64)
+    c = cache.get(128, 64)
+    assert a is c
+    assert a is not b
+

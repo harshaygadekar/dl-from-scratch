@@ -16,3 +16,20 @@ def test_cache_append_increments_length():
     k_now, v_now = current_kv(cache)
     assert k_now.shape == (2, 4, 1, 8)
     assert v_now.shape == (2, 4, 1, 8)
+
+
+
+def test_phase_c_basic_31_append_preserves_order():
+    cache = init_kv_cache(batch=1, heads=1, max_seq=4, head_dim=2)
+    k1 = np.array([[[[1.0, 2.0]]]], dtype=np.float32)
+    v1 = np.array([[[[3.0, 4.0]]]], dtype=np.float32)
+    k2 = np.array([[[[5.0, 6.0]]]], dtype=np.float32)
+    v2 = np.array([[[[7.0, 8.0]]]], dtype=np.float32)
+    append_kv(cache, k1, v1)
+    append_kv(cache, k2, v2)
+    k_now, v_now = current_kv(cache)
+    np.testing.assert_allclose(k_now[0, 0, 0], [1.0, 2.0])
+    np.testing.assert_allclose(k_now[0, 0, 1], [5.0, 6.0])
+    np.testing.assert_allclose(v_now[0, 0, 0], [3.0, 4.0])
+    np.testing.assert_allclose(v_now[0, 0, 1], [7.0, 8.0])
+
