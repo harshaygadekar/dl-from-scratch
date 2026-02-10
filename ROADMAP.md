@@ -68,11 +68,22 @@ Track your progress through the DL-From-Scratch curriculum.
 - [ ] **Topic 29**: Transformer Decoder Block
 - [ ] **Topic 30**: Mini-GPT Training 🎯 *Milestone: Coherent text generation*
 
-### Advanced Track (Optional)
+### Advanced Track (Core)
 - [ ] **Topic 31**: KV-Cache Optimization
 - [ ] **Topic 32**: Modern Optimizations (FlashAttention, Gradient Checkpointing)
 - [ ] **Topic 33**: Quantization & Efficiency
 - [ ] **Topic 34**: Distributed Training Logic
+
+---
+
+## Module 5: Bonus LLM Systems (Optional) 🧪
+
+> **Optional extension**: complete after Topics 01-34.
+
+- [ ] **Topic 35**: LoRA and QLoRA Fundamentals
+- [ ] **Topic 36**: Speculative Decoding Simulation
+- [ ] **Topic 37**: Mixture-of-Experts Routing
+- [ ] **Topic 38**: SSM and Mamba Selective Scan
 
 ---
 
@@ -81,7 +92,13 @@ Track your progress through the DL-From-Scratch curriculum.
 Run this command to see your visual progress:
 
 ```bash
-python utils/progress.py
+python3 utils/progress.py
+
+# Mark completed topics in your local state
+python3 utils/progress.py --mark-topic 1 2 3
+
+# Undo a mark
+python3 utils/progress.py --unmark-topic 2
 ```
 
 ---
@@ -96,6 +113,16 @@ python utils/progress.py
 | Transformer Builder | 30 | Coherent text generation | ⬜ |
 | Production Ready | 34 | All advanced topics | ⬜ |
 
+Use milestone harness commands:
+
+```bash
+# Fast deterministic checks
+python3 utils/milestone_eval.py --smoke
+
+# Full milestone checks via topic tests
+python3 utils/milestone_eval.py
+```
+
 ---
 
 ## 💡 Tips
@@ -107,4 +134,4 @@ python utils/progress.py
 
 ---
 
-*Update this file as you complete topics to track your journey!*
+*Use `utils/progress.py` local state commands to track your journey.*
