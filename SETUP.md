@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ### Step 4: Verify Installation
 
 ```bash
-python utils/test_runner.py --verify-setup
+python3 utils/test_runner.py --verify-setup
 ```
 
 **Expected output:**
@@ -120,6 +120,9 @@ Any Python IDE works. Recommended:
 After successful verification:
 
 ```bash
+# (Optional) initialize and view your local progress state
+python3 utils/progress.py
+
 cd "Module 00-Foundations/Topic 01-Tensor-Operations"
 cat README.md
 # Start learning!

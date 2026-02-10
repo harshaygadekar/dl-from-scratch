@@ -2,33 +2,30 @@
 
 ## Goal In This Hint
 
-Train a compact autoregressive language model with correct batching, loss, and generation loop.
+Establish strict shape and dtype contracts for the first correct implementation path.
 
-## Core Idea
+## Topic-Specific Mini Example
 
-Token batching should preserve contiguous context windows and aligned targets.
-Before coding, keep a shape trace next to your implementation and update it whenever you reshape, transpose, split, or merge axes.
+- input tokens (B,T) -> logits (B,T,V), targets (B,T) from one-step shift.
+- Verify the related API path: make_batches, cross_entropy_from_logits, bigram_forward, generate_bigram
 
-## Implementation Plan
+## Concrete Failure Mode
 
-1. Write the exact tensor shapes for inputs, outputs, and key intermediates.
-2. Implement a smallest-case forward path first (`batch=1`, minimal sequence/spatial length).
-3. Add one deterministic numeric example and one strict shape assertion before generalizing.
-4. Only then expand to full batch and real dimensions.
+- Targets are not shifted by one token, producing deceptively low but meaningless loss.
 
-## Common Mistakes
+## Debugging Checklist
 
-- Mixing axis conventions (`NCHW` vs `NHWC`, `B,T,H,D` vs `B,H,T,D`) and debugging values before fixing shape contracts.
-- Applying residual, normalization, masking, or scaling in the wrong order for the intended algorithm.
-- Skipping finite checks (`NaN`/`Inf`) during development and finding instability only after many training steps.
-- Starting with full-size tensors hides indexing mistakes that are obvious on tiny examples.
+- Set a deterministic seed and record one known-good tensor output.
+- Assert shape and dtype after every transformation step.
+- Check finite values (no NaN/Inf) after normalization, masking, or exponentials.
+- Verify every reshape and transpose with an assert immediately after it.
 
-## Quick Self-Check
+## Exit Criteria
 
-- Can you state the expected shape and dtype at every major line?
-- Do tiny deterministic tests and random-input tests both pass?
-- Can you explain every axis transition line by line without guessing?
+- Basic case passes with exact or near-exact expectation.
+- One edge case is validated with explicit assertion.
+- You can explain why this hint prevents the listed failure mode.
 
 ## Next
 
-Continue with [Hint 2 - Next Token Loss](hint-2-next-token-loss.md) after you can pass the quick checks below.
+Continue with Hint 2 using file 'hint-2-next-token-loss.md' after passing the checks below.

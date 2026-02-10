@@ -2,17 +2,24 @@
 """
 Progress Tracker
 
-Shows visual progress through the DL-From-Scratch curriculum.
+Tracks learner progress through the DL-From-Scratch curriculum using local state.
 
 Usage:
     python utils/progress.py
     python utils/progress.py --detailed
+    python utils/progress.py --mark-topic 1
+    python utils/progress.py --unmark-topic 1
+    python utils/progress.py --reset
+    python utils/progress.py --status-json
 """
 
-import argparse
-from pathlib import Path
-from typing import Dict, List, Tuple
+from __future__ import annotations
 
+import argparse
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Dict, List
 
 # Module definitions: (name, topic_start, topic_end)
 MODULES = [
@@ -31,78 +38,119 @@ MILESTONES = {
     34: "Full curriculum complete!",
 }
 
+MIN_TOPIC = 1
+MAX_TOPIC = 34
+
 
 def get_root_dir() -> Path:
     """Get the repository root directory."""
     return Path(__file__).parent.parent
 
 
-def scan_completed_topics() -> List[int]:
-    """
-    Scan for completed topics based on solution file existence.
-    
-    A topic is considered complete if it has at least the level01 solution.
-    """
-    root = get_root_dir()
-    completed = []
-    
-    for module_name, start, end in MODULES:
-        module_path = root / module_name
-        if not module_path.exists():
-            continue
-        
-        for topic_folder in module_path.iterdir():
-            if not topic_folder.is_dir():
-                continue
-            
-            # Extract topic number from folder name
-            name = topic_folder.name
-            if not name.startswith("Topic"):
-                continue
-            
-            try:
-                # Parse "Topic XX-Name" format
-                parts = name.split("-")
-                topic_num = int(parts[0].replace("Topic", "").strip())
-            except (ValueError, IndexError):
-                continue
-            
-            # Check for solution files
-            solutions_dir = topic_folder / "solutions"
-            if solutions_dir.exists():
-                solution_files = list(solutions_dir.glob("*.py"))
-                if len(solution_files) >= 1:
-                    completed.append(topic_num)
-    
-    return sorted(completed)
+def get_progress_state_path() -> Path:
+    """Get the local learner progress file path."""
+    return get_root_dir() / "data" / "progress" / "progress_state.json"
+
+
+def default_state() -> Dict:
+    return {
+        "version": 1,
+        "completed_topics": [],
+        "updated_at_utc": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def _sanitize_topics(raw_topics: List[int]) -> List[int]:
+    cleaned = []
+    for topic in raw_topics:
+        if isinstance(topic, int) and MIN_TOPIC <= topic <= MAX_TOPIC:
+            cleaned.append(topic)
+    return sorted(set(cleaned))
+
+
+def load_state() -> Dict:
+    """Load learner progress state from disk, creating defaults when needed."""
+    state_path = get_progress_state_path()
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if not state_path.exists():
+        state = default_state()
+        save_state(state)
+        return state
+
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        state = default_state()
+        save_state(state)
+        return state
+
+    if not isinstance(state, dict):
+        state = default_state()
+
+    completed = state.get("completed_topics", [])
+    if not isinstance(completed, list):
+        completed = []
+
+    state["completed_topics"] = _sanitize_topics(completed)
+    state["version"] = 1
+    state.setdefault("updated_at_utc", datetime.now(timezone.utc).isoformat())
+    return state
+
+
+def save_state(state: Dict) -> None:
+    """Persist learner progress state to disk."""
+    state_path = get_progress_state_path()
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+
+    payload = {
+        "version": 1,
+        "completed_topics": _sanitize_topics(state.get("completed_topics", [])),
+        "updated_at_utc": datetime.now(timezone.utc).isoformat(),
+    }
+    state_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def get_progress_stats(completed: List[int]) -> Dict:
-    """Calculate progress statistics."""
-    total_topics = 34
+    """Calculate progress statistics from learner state."""
+    completed = _sanitize_topics(completed)
+    completed_set = set(completed)
+
+    total_topics = MAX_TOPIC
     num_completed = len(completed)
-    percentage = (num_completed / total_topics) * 100
-    
-    # Find current topic (highest completed + 1)
-    current_topic = max(completed) + 1 if completed else 1
-    current_topic = min(current_topic, 34)
-    
-    # Find current module
-    current_module = "Module 00"
+    percentage = (num_completed / total_topics) * 100 if total_topics else 0.0
+
+    current_topic = next(
+        (
+            topic
+            for topic in range(MIN_TOPIC, MAX_TOPIC + 1)
+            if topic not in completed_set
+        ),
+        MAX_TOPIC,
+    )
+
+    current_module = MODULES[0][0].split("-")[0]
     for module_name, start, end in MODULES:
         if start <= current_topic <= end:
             current_module = module_name.split("-")[0]
             break
-    
-    # Find next milestone
+
     next_milestone = None
     next_milestone_desc = None
     for milestone_topic, desc in sorted(MILESTONES.items()):
-        if milestone_topic not in completed:
+        if milestone_topic not in completed_set:
             next_milestone = milestone_topic
             next_milestone_desc = desc
             break
-    
+
+    topics_to_milestone = 0
+    if next_milestone is not None:
+        topics_to_milestone = sum(
+            1
+            for topic in range(MIN_TOPIC, next_milestone + 1)
+            if topic not in completed_set
+        )
+
     return {
         "completed": num_completed,
         "total": total_topics,
@@ -112,103 +160,152 @@ def get_progress_stats(completed: List[int]) -> Dict:
         "completed_topics": completed,
         "next_milestone": next_milestone,
         "next_milestone_desc": next_milestone_desc,
+        "topics_to_milestone": topics_to_milestone,
+        "state_file": str(get_progress_state_path()),
     }
 
 
 def render_progress_bar(percentage: float, width: int = 40) -> str:
     """Render ASCII progress bar."""
     filled = int(width * percentage / 100)
-    remaining = width - filled - 1
-    
-    if remaining < 0:
-        remaining = 0
-        filled = width
-    
-    bar = "█" * filled
-    if remaining > 0:
-        bar += "▶" + "░" * remaining
-    
-    return f"[{bar}]"
+    if filled >= width:
+        return f"[{'█' * width}]"
+
+    remaining = max(width - filled - 1, 0)
+    return f"[{'█' * filled}▶{'░' * remaining}]"
 
 
 def print_basic_progress(stats: Dict):
     """Print basic progress summary."""
     bar = render_progress_bar(stats["percentage"])
-    
+
     print()
     print(bar)
-    print(f"{stats['current_module']} Topic {stats['current_topic']:02d} ({stats['percentage']:.0f}%)")
+    print(
+        f"{stats['current_module']} Topic {stats['current_topic']:02d} ({stats['percentage']:.0f}%)"
+    )
     print()
     print(f"Completed: {stats['completed']}/{stats['total']} topics")
-    
-    if stats["next_milestone"]:
-        topics_to_milestone = stats["next_milestone"] - max(stats["completed_topics"], default=0)
-        print(f"Next milestone: Topic {stats['next_milestone']} - {stats['next_milestone_desc']}")
-        print(f"Topics remaining: {topics_to_milestone}")
+
+    if stats["next_milestone"] is not None:
+        print(
+            f"Next milestone: Topic {stats['next_milestone']} - {stats['next_milestone_desc']}"
+        )
+        print(f"Topics remaining: {stats['topics_to_milestone']}")
+
+    print(f"State file: {stats['state_file']}")
 
 
 def print_detailed_progress(stats: Dict):
     """Print detailed progress by module."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("DL-From-Scratch Progress Report")
-    print("="*60)
-    
+    print("=" * 60)
+
     completed_set = set(stats["completed_topics"])
-    
+
     for module_name, start, end in MODULES:
         print(f"\n{module_name}")
         print("-" * len(module_name))
-        
+
         module_completed = sum(1 for t in range(start, end + 1) if t in completed_set)
         module_total = end - start + 1
         module_pct = (module_completed / module_total) * 100
-        
+
         print(f"Progress: {module_completed}/{module_total} ({module_pct:.0f}%)")
-        
+
         for topic in range(start, end + 1):
             status = "✅" if topic in completed_set else "⬜"
             milestone_marker = " 🏆" if topic in MILESTONES else ""
             print(f"  {status} Topic {topic:02d}{milestone_marker}")
-    
-    print("\n" + "="*60)
+
+    print("\n" + "=" * 60)
     print_basic_progress(stats)
-    
-    # Encouragement messages
-    print()
-    if stats["completed"] == stats["total"]:
-        print("🎉 Congratulations! You've completed DL-From-Scratch!")
-        print("   You now truly understand deep learning from the ground up.")
-    elif stats["completed"] >= 30:
-        print("🔥 Almost there! Just the advanced production topics left!")
-    elif stats["completed"] >= 24:
-        print("🌟 Incredible progress! You've mastered attention mechanisms!")
-    elif stats["completed"] >= 17:
-        print("📈 Great work! CNNs complete, moving to sequences!")
-    elif stats["completed"] >= 10:
-        print("💪 Excellent! You can now train a neural network from scratch!")
-    elif stats["completed"] >= 3:
-        print("🚀 Foundation complete! Ready for neural networks!")
-    elif stats["completed"] >= 1:
-        print("👍 You've started! Keep the momentum going!")
-    else:
-        print("📚 Welcome! Start with Topic 01 to begin your journey.")
+
+
+def validate_topics(topics: List[int], arg_name: str) -> List[int]:
+    invalid = [topic for topic in topics if not (MIN_TOPIC <= topic <= MAX_TOPIC)]
+    if invalid:
+        invalid_str = ", ".join(str(topic) for topic in invalid)
+        raise ValueError(
+            f"{arg_name} values must be in range {MIN_TOPIC}-{MAX_TOPIC}. Invalid: {invalid_str}"
+        )
+    return sorted(set(topics))
+
+
+def apply_actions(state: Dict, mark: List[int], unmark: List[int], reset: bool) -> Dict:
+    if reset:
+        state = default_state()
+
+    completed = set(state.get("completed_topics", []))
+
+    for topic in mark:
+        completed.add(topic)
+
+    for topic in unmark:
+        completed.discard(topic)
+
+    state["completed_topics"] = sorted(completed)
+    return state
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Track your progress through DL-From-Scratch"
+        description="Track learner progress through DL-From-Scratch"
     )
     parser.add_argument(
-        "--detailed", "-d", 
+        "--detailed",
+        "-d",
         action="store_true",
-        help="Show detailed progress by module"
+        help="Show detailed progress by module",
     )
-    
+    parser.add_argument(
+        "--mark-topic",
+        type=int,
+        nargs="+",
+        default=[],
+        help="Mark one or more topics complete (e.g. --mark-topic 1 2 3)",
+    )
+    parser.add_argument(
+        "--unmark-topic",
+        type=int,
+        nargs="+",
+        default=[],
+        help="Unmark one or more completed topics",
+    )
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Reset progress state to 0 completed topics",
+    )
+    parser.add_argument(
+        "--status-json",
+        action="store_true",
+        help="Print progress stats as JSON",
+    )
+
     args = parser.parse_args()
-    
-    completed = scan_completed_topics()
-    stats = get_progress_stats(completed)
-    
+
+    try:
+        mark_topics = validate_topics(args.mark_topic, "--mark-topic")
+        unmark_topics = validate_topics(args.unmark_topic, "--unmark-topic")
+    except ValueError as exc:
+        parser.error(str(exc))
+
+    state = load_state()
+    has_actions = bool(mark_topics or unmark_topics or args.reset)
+
+    if has_actions:
+        state = apply_actions(state, mark_topics, unmark_topics, args.reset)
+        save_state(state)
+        state = load_state()
+
+    stats = get_progress_stats(state["completed_topics"])
+
+    if args.status_json:
+        print(json.dumps(stats, indent=2))
+        return
+
     if args.detailed:
         print_detailed_progress(stats)
     else:

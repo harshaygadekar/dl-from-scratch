@@ -16,11 +16,12 @@
 
 ## ⏱️ Time Commitment
 
-**34 topics** • **2-3 hours/day** • **Prerequisites:** Python, Linear Algebra 101, Calculus I
+**34 core topics + 4 optional bonus topics** • **2-3 hours/day** • **Prerequisites:** Python, Linear Algebra 101, Calculus I
 
 ## 📌 Current Status
 
 - Curriculum fully scaffolded across **Modules 00 to 04** (**Topics 01 to 34**)
+- Optional 2026 bonus module available as **Module 05** (**Topics 35 to 38**)
 - Every topic includes `README.md`, `hints/hint-1..3`, `tests/test_basic.py` + `test_edge.py` + `test_stress.py`, and `solutions/level01..level04`
 - Hint content is now standardized with detailed scaffolding across later modules (CNN advanced topics, RNNs, Transformers)
 - Recent validation run completed successfully across all topics (`01-34`) in a clean virtual environment
@@ -76,6 +77,11 @@ cd "Module 00-Foundations/Topic 01-Tensor-Operations"
 | 25-30 | Self-Attention → Mini-GPT | Build a small language model |
 | 31-34 | Production Optimization | KV-cache, quantization, distributed |
 
+### Module 5: Bonus LLM Systems (Optional)
+| Topic | Title | Key Concept |
+|-------|-------|-------------|
+| 35-38 | LoRA → Selective Scan | Modern systems intuition and toy implementations |
+
 ## 🔧 The "From Scratch" Rules
 
 ### ❌ Forbidden (Black Boxes)
@@ -117,14 +123,21 @@ Every topic has 4 solution tiers:
 3. Move to `level02`/`level03` only after `level01` passes
 4. Use `level04` as reference verification, not as first attempt
 5. Keep a short implementation log: what failed, what changed, what you learned
+6. Optional after core completion: explore Module 05 Topics 35-38 for 2026 systems extensions
 
 This sequencing keeps understanding ahead of optimization and reduces confusion across dependencies.
 
 ## 📊 Track Your Progress
 
 ```bash
-python utils/progress.py
-# [###########>          ] Module 0 Topic 02 (6%)
+python3 utils/progress.py
+# [█████▶░░░░░░░░░░░░░░░░░░░░░░░░░░░░] Module 00 Topic 03 (12%)
+
+# Mark topics complete in your local progress state
+python3 utils/progress.py --mark-topic 1 2
+
+# Get machine-readable status
+python3 utils/progress.py --status-json
 ```
 
 ## 🤔 Why Not Just Watch Karpathy?
@@ -145,13 +158,20 @@ We love Karpathy's content! This is **complementary**, not competitive:
 
 ```bash
 # Run tests for a specific topic
-python utils/test_runner.py --day 05
+python3 utils/test_runner.py --day 05
 
 # List all topics
-python utils/test_runner.py --list
+python3 utils/test_runner.py --list
 
 # Verify your setup
-python utils/test_runner.py --verify-setup
+python3 utils/test_runner.py --verify-setup
+
+# Run full curriculum validation (Topics 01-34)
+python3 utils/validate_all.py
+
+# Run milestone evaluation harness (Topics 10/17/24/30/34)
+python3 utils/milestone_eval.py --smoke
+python3 utils/milestone_eval.py
 ```
 
 ## 📝 License

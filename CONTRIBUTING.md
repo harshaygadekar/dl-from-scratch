@@ -52,7 +52,26 @@ git checkout -b hint/topic-12-im2col
 
 Follow the file templates exactly. Run tests before submitting.
 
-### Step 4: Submit PR
+### Step 4: Run Quality Gates
+
+For topic/content changes, run:
+
+```bash
+# Content quality lint (all topics)
+python3 scripts/lint_topic_content.py
+
+# Or core-only lint
+python3 scripts/lint_topic_content.py --core-only
+```
+
+For solution/test changes in a topic, also run:
+
+```bash
+# Replace XX with your topic number
+python3 utils/test_runner.py --day XX
+```
+
+### Step 5: Submit PR
 
 Use the PR template and describe your changes clearly.
 
@@ -113,9 +132,36 @@ def test_edge_case_empty():
 
 ---
 
+## Topic Quality Checklist (Required for Topic PRs)
+
+Use:
+
+- `docs/authoring/topic-quality-checklist.md`
+
+Minimum merge bar for topic-related PRs:
+
+- Topic structure files are present (`README.md`, `questions.md`, hints, tests, solutions).
+- README includes objective framing, implementation/problem framing, and success/verification criteria.
+- `questions.md` includes at least 3 concrete interview prompts.
+- Milestone topics (10, 17, 24, 30, 34) include `metrics.md`.
+- Bonus topics (35-38) include `benchmark.py`.
+- `python3 scripts/lint_topic_content.py` passes.
+
+---
+
+## Reporting Content Quality Issues
+
+Use issue templates:
+
+- `Bug Report` for implementation/test defects.
+- `I'm Stuck` for learner debugging help.
+- `Curriculum Quality Gap` for unclear/incomplete topic content.
+
+---
+
 ## Questions?
 
-Open an issue with the "question" label.
+Open an issue with the `question` label.
 
 ---
 

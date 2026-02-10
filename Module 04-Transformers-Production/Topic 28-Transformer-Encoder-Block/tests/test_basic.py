@@ -22,3 +22,15 @@ def test_encoder_block_shape():
     }
     y = encoder_block_forward(x, **block)
     assert y.shape == x.shape
+
+
+from level01_naive import layer_norm
+
+
+def test_phase_c_stats_28_layer_norm_mean_variance():
+    np.random.seed(13)
+    x = np.random.randn(3, 4, 6).astype(np.float32)
+    y = layer_norm(x)
+    np.testing.assert_allclose(y.mean(axis=-1), np.zeros((3, 4)), atol=1e-5)
+    np.testing.assert_allclose(y.var(axis=-1), np.ones((3, 4)), atol=1e-4)
+

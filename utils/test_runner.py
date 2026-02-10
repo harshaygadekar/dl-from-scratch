@@ -72,8 +72,12 @@ def find_topic_dir(day: int) -> Path:
         module = "Module 02-CNNs"
     elif day <= 24:
         module = "Module 03-RNNs-Sequences"
-    else:
+    elif day <= 34:
         module = "Module 04-Transformers-Production"
+    elif day <= 38:
+        module = "Module 05-Bonus-LLM-Systems"
+    else:
+        return None
 
     # Find matching topic folder
     module_path = root / module
@@ -166,6 +170,7 @@ def list_topics():
         "Module 02-CNNs",
         "Module 03-RNNs-Sequences",
         "Module 04-Transformers-Production",
+        "Module 05-Bonus-LLM-Systems",
     ]
 
     print("📚 Available Topics:\n")
@@ -197,7 +202,7 @@ Examples:
   python utils/test_runner.py --list             List all topics
         """,
     )
-    parser.add_argument("--day", type=int, help="Topic number to test (1-34)")
+    parser.add_argument("--day", type=int, help="Topic number to test (1-38)")
     parser.add_argument(
         "--level", type=int, choices=[1, 2, 3, 4], help="Solution level to test"
     )
