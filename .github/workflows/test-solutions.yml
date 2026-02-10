@@ -39,24 +39,8 @@ jobs:
       - name: Test timer utility
         run: python utils/timer.py
 
-      - name: Run topic tests
-        run: |
-          failed=0
-          while IFS= read -r test_file; do
-            topic_dir="$(dirname "$(dirname "$test_file")")"
-            topic_name="$(basename "$topic_dir")"
-            topic_day="$(echo "$topic_name" | sed -E 's/^Topic ([0-9]+).*/\1/')"
-
-            echo "Testing ${topic_name}..."
-            if python utils/test_runner.py --day "${topic_day}"; then
-              echo "✅ ${topic_name}: PASSED"
-            else
-              echo "❌ ${topic_name}: FAILED"
-              failed=1
-            fi
-          done < <(find Module* -type f -path "*/tests/test_basic.py" | sort)
-
-          exit $failed
+      - name: Run full curriculum validation
+        run: python utils/validate_all.py
 
   lint:
     runs-on: ubuntu-latest
@@ -72,3 +56,24 @@ jobs:
         run: |
           python -m py_compile utils/*.py
           echo "✅ All Python files have valid syntax"
+
+      - name: Lint topic content structure
+        run: python scripts/lint_topic_content.py
+
+  milestone-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run milestone smoke evaluation
+        run: python utils/milestone_eval.py --smoke

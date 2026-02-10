@@ -64,4 +64,13 @@ Thumbs.db
 !assets/*.html
 
 # Local datasets/cache
-data/
+data/*
+!data/progress/
+data/progress/*
+!data/progress/.gitkeep
+data/progress/progress_state.json
+
+# Validation artifacts
+.validation_report.json
+.milestone_eval_report.json
+.topic_content_lint_report.json
